@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myrepo-deployment
+  labels:
+    app: myrepo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myrepo
+  template:
+    metadata:
+      labels:
+        app: myrepo
+    spec:
+      containers:
+        - name: myrepo
+          image: 23aparna/myrepo:latest   # Replace with your image name and tag
+          ports:
+            - containerPort: 80            # Adjust if your container uses a different port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myrepo-service
+spec:
+  selector:
+    app: myrepo
+  ports:
+    - protocol: TCP
+      port: 80                         # The port exposed by the service
+      targetPort: 80                   # The port inside the container
+      nodePort: 30080                  # The NodePort you want to expose
+  type: NodePort                      # NodePort type service
+
